@@ -32,7 +32,12 @@ export const columns: ColumnDef<Student>[] = [
 		header: 'Nama',
 	},
 	{
-		accessorKey: 'gender',
+		accessorFn: (student) => student.measurement?.size,
+		header: 'Ukuran',
+	},
+	{
+		accessorFn: (student) =>
+			student.gender === 'L' ? 'Laki-laki' : 'Perempuan',
 		header: 'Jenis Kelamin',
 	},
 	{
