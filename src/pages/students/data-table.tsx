@@ -38,6 +38,7 @@ export function DataTable({ columns, data, onSelectedRow }: DataTableProps) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [searchParams, setSearchParams] = useSearchParams();
 	const school = searchParams.get('school');
+	const orderStatus = searchParams.get('orderStatus');
 
 	const table = useReactTable({
 		data,
@@ -60,7 +61,7 @@ export function DataTable({ columns, data, onSelectedRow }: DataTableProps) {
 	return (
 		<div>
 			<h1 className="text-center text-3xl">{school}</h1>
-			<div className="flex items-center py-4 justify-between">
+			<div className="flex flex-col gap-5 items-center py-4 lg:justify-between">
 				<Input
 					placeholder="Cari berdasarkan nama..."
 					value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
@@ -69,26 +70,63 @@ export function DataTable({ columns, data, onSelectedRow }: DataTableProps) {
 					}
 					className="max-w-sm"
 				/>
-				<div className="flex gap-1">
+				<div className="flex gap-2">
 					<Badge
 						className={`cursor-pointer ${
 							school === 'SMP' ? 'bg-green-500' : ''
 						}`}
 						onClick={() => {
-							setSearchParams('?school=SMP');
+							searchParams.set('school', 'SMP');
+							setSearchParams(searchParams);
 						}}
 					>
 						SMP
 					</Badge>
 					<Badge
 						className={`cursor-pointer ${
-							searchParams.get('school') === 'SMA' ? 'bg-green-500' : ''
+							school === 'SMA' ? 'bg-green-500' : ''
 						}`}
 						onClick={() => {
-							setSearchParams('?school=SMA');
+							searchParams.set('school', 'SMA');
+							setSearchParams(searchParams);
 						}}
 					>
 						SMA
+					</Badge>
+				</div>
+				<div className="flex gap-2">
+					<Badge
+						className={`cursor-pointer ${
+							orderStatus === 'IN_PROGRESS' ? 'bg-green-500' : ''
+						}`}
+						onClick={() => {
+							searchParams.set('orderStatus', 'IN_PROGRESS');
+							setSearchParams(searchParams);
+						}}
+					>
+						Sedang Dibuat
+					</Badge>
+					<Badge
+						className={`cursor-pointer ${
+							orderStatus === 'READY' ? 'bg-green-500' : ''
+						}`}
+						onClick={() => {
+							searchParams.set('orderStatus', 'READY');
+							setSearchParams(searchParams);
+						}}
+					>
+						Siap Diambil
+					</Badge>
+					<Badge
+						className={`cursor-pointer ${
+							orderStatus === 'DONE' ? 'bg-green-500' : ''
+						}`}
+						onClick={() => {
+							searchParams.set('orderStatus', 'DONE');
+							setSearchParams(searchParams);
+						}}
+					>
+						Sudah Diambil
 					</Badge>
 				</div>
 			</div>

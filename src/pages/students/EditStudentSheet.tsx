@@ -21,7 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { toast } from 'sonner';
 import { OrderBadge } from './OrderBadge';
-import { type UpdatePayload, updateOrderStatus } from './api';
+import { type UpdatePayload, updateStudent } from './api';
 import type { Student } from './columns';
 
 type Props = {
@@ -38,11 +38,16 @@ type MutationVariable = {
 function EditStudentSheet(props: Props) {
 	const [orderStatus, setOrderStatus] = React.useState(props.data.orderStatus);
 	const [notes, setNotes] = React.useState(props.data.notes);
+	const [size, setSize] = React.useState<string | undefined>(
+		props.data.measurement?.size,
+	);
+
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: ({ id, updatePayload }: MutationVariable) =>
-			updateOrderStatus(id, updatePayload),
-		onSuccess: () => {
+			updateStudent(id, updatePayload),
+		onSuccess: (data) => {
+			console.log({ data });
 			toast.success('Berhasil mengubah data!');
 			queryClient.invalidateQueries({ queryKey: ['studentList'] });
 			props.setShow(false);
@@ -61,12 +66,33 @@ function EditStudentSheet(props: Props) {
 								{props.data.school}
 							</p>
 							<p className="text-xl font-bold dark:text-white text-black">
-								{props.data.name}
+								Nama: {props.data.name}
 							</p>
 							<p className="text-xl font-bold dark:text-white text-black">
-								{props.data.grade}
+								Kelas: {props.data.grade}
 							</p>
 							<div>
+								<Label className="text-xl font-bold dark:text-white text-black">
+									Ukuran
+								</Label>
+								<Select defaultValue={size} onValueChange={setSize}>
+									<SelectTrigger className="">
+										<SelectValue placeholder="Pilih Ukuran" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="S">S</SelectItem>
+										<SelectItem value="M">M</SelectItem>
+										<SelectItem value="L">L</SelectItem>
+										<SelectItem value="XL">XL</SelectItem>
+										<SelectItem value="XXL">XXL</SelectItem>
+										<SelectItem value="XXXL">XXXL</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
+							<div>
+								<Label className="text-xl font-bold dark:text-white text-black">
+									Order
+								</Label>
 								<Select
 									defaultValue={orderStatus}
 									onValueChange={setOrderStatus}
@@ -103,13 +129,22 @@ function EditStudentSheet(props: Props) {
 							</div>
 							<Button
 								disabled={
-									status === props.data.orderStatus &&
-									notes === props.data.notes
+									orderStatus === props.data.orderStatus &&
+									notes === props.data.notes &&
+									size === props.data.measurement?.size
 								}
 								onClick={() =>
 									mutation.mutate({
 										id: props.data.id,
-										updatePayload: { orderStatus, notes },
+										updatePayload: {
+											orderStatus,
+											notes,
+											measurement: {
+												student: props.data.id,
+												size,
+												id: props.data.measurement?.id,
+											},
+										},
 									})
 								}
 							>

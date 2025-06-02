@@ -15,10 +15,11 @@ function Students() {
 		null,
 	);
 	const school = searchParams.get('school') || 'SMP';
+	const orderStatus = searchParams.get('orderStatus');
 
 	const { isPending, data, error } = useQuery({
-		queryKey: ['studentList', school],
-		queryFn: getStudents(school),
+		queryKey: ['studentList', school, orderStatus],
+		queryFn: getStudents(school, orderStatus),
 	});
 
 	if (isPending)

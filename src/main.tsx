@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 // biome-ignore lint/style/noNonNullAssertion: Satisfy createRoot only accept HTML Element
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<Toaster position="bottom-center" closeButton duration={1200}/>
+		<Toaster position="bottom-center" duration={1200} />
 		<QueryClientProvider client={queryClient}>
 			<BrowserRouter>
 				<Routes>
