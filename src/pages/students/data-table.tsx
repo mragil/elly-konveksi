@@ -72,6 +72,15 @@ export function DataTable({ columns, data, onSelectedRow }: DataTableProps) {
 				/>
 				<div className="flex gap-2">
 					<Badge
+						className={`cursor-pointer ${!school ? 'bg-green-500' : ''}`}
+						onClick={() => {
+							searchParams.set('school', '');
+							setSearchParams(searchParams);
+						}}
+					>
+						Semua
+					</Badge>
+					<Badge
 						className={`cursor-pointer ${
 							school === 'SMP' ? 'bg-green-500' : ''
 						}`}
@@ -95,6 +104,15 @@ export function DataTable({ columns, data, onSelectedRow }: DataTableProps) {
 					</Badge>
 				</div>
 				<div className="flex gap-2">
+					<Badge
+						className={`cursor-pointer ${!orderStatus ? 'bg-green-500' : ''}`}
+						onClick={() => {
+							searchParams.set('orderStatus', '');
+							setSearchParams(searchParams);
+						}}
+					>
+						Semua
+					</Badge>
 					<Badge
 						className={`cursor-pointer ${
 							orderStatus === 'IN_PROGRESS' ? 'bg-green-500' : ''

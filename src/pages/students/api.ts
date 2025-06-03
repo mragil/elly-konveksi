@@ -27,12 +27,18 @@ const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
 export const getStudents =
 	(school: string, orderStatus: string | null) => async () => {
-		const orderStatusFilter = orderStatus
-			? `&& orderStatus='${orderStatus}'`
-			: '';
-		const filter = `school='${school}'${orderStatusFilter}`;
+		const schoolFilter = school ? `school='${school}'` : '';
+		const orderStatusFilter = orderStatus ? `orderStatus='${orderStatus}'` : '';
+		const filterArr = [schoolFilter, orderStatusFilter];
+
+		const filter = filterArr.reduce((prev, curr) => {
+			if (prev === '') return `${curr}`;
+			return `${prev} && ${curr}`;
+		}, '');
+	
+		console.log(filter ? { filter } : {});
 		const records = await pb.collection('students').getFullList<StudentRecord>({
-			filter,
+			...(filter ? { filter } : {}),
 			sort: 'no',
 			expand: 'measurement',
 		});

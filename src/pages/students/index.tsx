@@ -14,7 +14,7 @@ function Students() {
 	const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(
 		null,
 	);
-	const school = searchParams.get('school') || 'SMP';
+	const school = searchParams.get('school') || '';
 	const orderStatus = searchParams.get('orderStatus');
 
 	const { isPending, data, error } = useQuery({
